@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informe — Actividad Integradora 2 · TaskManager</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #475569;
+      --soft: #64748b;
+      --line: #dbe3ef;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --surface: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: #e9eef6;
+    }
+
+    body {
+      font-family: "Segoe UI", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      font-size: 10pt;
+      line-height: 1.45;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      position: relative;
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 10mm;
+      padding: 16mm 17mm 16mm;
+      background: #fff;
+      box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16);
+    }
+
+    .page--cover {
+      padding-top: 20mm;
+      border-top: 6px solid var(--accent);
+    }
+
+    .page__footer {
+      position: absolute;
+      left: 17mm;
+      right: 17mm;
+      bottom: 8mm;
+      display: flex;
+      justify-content: space-between;
+      padding-top: 3mm;
+      border-top: 1px solid var(--line);
+      font-size: 7.5pt;
+      color: var(--soft);
+    }
+
+    h1,
+    h2,
+    h3,
+    p,
+    dl,
+    dd,
+    figure {
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 15pt;
+      letter-spacing: -0.01em;
+      margin-bottom: 3mm;
+    }
+
+    h3 {
+      font-size: 10.5pt;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 3.5mm 0 1.5mm;
+    }
+
+    p {
+      color: #1e293b;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* Cover */
+
+    .cover__top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding-bottom: 4mm;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .cover__brand {
+      font-size: 13pt;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+    }
+
+    .cover__course {
+      font-size: 8.5pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    .cover__main {
+      margin-top: 34mm;
+    }
+
+    .eyebrow {
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .cover__title {
+      margin-top: 4mm;
+      font-size: 46pt;
+      line-height: 1;
+      letter-spacing: -0.045em;
+      font-weight: 800;
+    }
+
+    .cover__subtitle {
+      margin-top: 5mm;
+      max-width: 150mm;
+      font-size: 13pt;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .cover__rule {
+      width: 34mm;
+      height: 3px;
+      margin: 9mm 0;
+      background: var(--accent);
+      border-radius: 999px;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4mm 8mm;
+      max-width: 160mm;
+    }
+
+    .meta dt {
+      font-size: 7.5pt;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    .meta dd {
+      margin-top: 1mm;
+      font-size: 10pt;
+      color: var(--ink);
+      overflow-wrap: anywhere;
+    }
+
+    .abstract {
+      margin-top: 18mm;
+      padding: 5mm 6mm;
+      border-left: 3px solid var(--accent);
+      background: var(--surface);
+    }
+
+    .abstract h2 {
+      font-size: 9pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2mm;
+    }
+
+    .abstract p {
+      font-size: 9.5pt;
+      color: var(--muted);
+      text-align: justify;
+    }
+
+    /* Content */
+
+    .section-lead {
+      font-size: 9.5pt;
+      color: var(--muted);
+      margin-bottom: 2mm;
+      text-align: justify;
+    }
+
+    .content p + p {
+      margin-top: 2mm;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.6pt;
+      margin-top: 2mm;
+    }
+
+    .table th {
+      text-align: left;
+      font-size: 7.5pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--soft);
+      background: #f1f5f9;
+      padding: 1.6mm 2.5mm;
+      border: 1px solid var(--line);
+    }
+
+    .table td {
+      padding: 1.6mm 2.5mm;
+      border: 1px solid var(--line);
+      vertical-align: top;
+      color: #1e293b;
+    }
+
+    .table td code {
+      font-size: 8pt;
+      color: var(--accent);
+    }
+
+    .code {
+      margin-top: 2mm;
+      padding: 4mm 5mm;
+      border-radius: 2.5mm;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: "Cascadia Code", "Consolas", "Courier New", monospace;
+      font-size: 8pt;
+      line-height: 1.55;
+      white-space: pre;
+      overflow: hidden;
+    }
+
+    .code .comment {
+      color: #94a3b8;
+    }
+
+    .code .keyword {
+      color: #c4b5fd;
+    }
+
+    .code .string {
+      color: #86efac;
+    }
+
+    .bullets {
+      margin: 2mm 0 0;
+      padding-left: 4.5mm;
+      font-size: 9.2pt;
+      color: #1e293b;
+    }
+
+    .bullets li {
+      margin-bottom: 1.2mm;
+    }
+
+    .bullets strong {
+      color: var(--ink);
+    }
+
+    /* Figures */
+
+    .shot {
+      margin-top: 3mm;
+    }
+
+    .shot__frame {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 2.5mm;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .shot__frame img {
+      display: block;
+      width: 100%;
+    }
+
+    .shot--app img {
+      height: 42mm;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .shot--devtools img {
+      width: 100%;
+      height: 68mm;
+      object-fit: contain;
+      background: var(--surface);
+      margin: 0 auto;
+    }
+
+    .shot__pending {
+      display: none;
+      padding: 16mm 8mm;
+      text-align: center;
+      color: var(--soft);
+      font-size: 9pt;
+      border: 1px dashed #c7d2e3;
+      border-radius: 2.5mm;
+    }
+
+    .shot__frame.is-pending .shot__pending {
+      display: block;
+    }
+
+    .shot figcaption {
+      margin-top: 2mm;
+      font-size: 8pt;
+      color: var(--soft);
+      text-align: center;
+    }
+
+    .section-title {
+      margin-top: 5mm;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.6mm 6mm;
+      margin: 1.5mm 0 0;
+      padding: 0;
+      list-style: none;
+      font-size: 8.6pt;
+      line-height: 1.4;
+    }
+
+    .checklist li {
+      position: relative;
+      padding-left: 5mm;
+      color: #1e293b;
+    }
+
+    .checklist li:last-child {
+      grid-column: 1 / -1;
+    }
+
+    .checklist code {
+      font-size: 8pt;
+      color: var(--accent);
+    }
+
+    .check {
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #047857;
+      font-weight: 700;
+    }
+
+    .conclusion {
+      margin-top: 4mm;
+      padding: 4mm 5mm;
+      background: var(--accent-soft);
+      border-radius: 2.5mm;
+      font-size: 9.4pt;
+      color: #312e81;
+      text-align: justify;
+    }
+
+    @media print {
+      html,
+      body {
+        background: #fff;
+      }
+
+      .page {
+        margin: 0;
+        box-shadow: none;
+        break-after: page;
+      }
+
+      .page:last-child {
+        break-after: auto;
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <article class="page page--cover">
+    <header class="cover__top">
+      <div class="cover__brand">ECOTEC</div>
+      <div class="cover__course">Programación de Sistemas Web</div>
+    </header>
+
+    <div class="cover__main">
+      <p class="eyebrow">Actividad Integradora 2</p>
+      <h1 class="cover__title">TaskManager</h1>
+      <p class="cover__subtitle">
+        Gestión de tareas en JavaScript Vanilla con arquitectura modular ES6,
+        consumo de API REST y persistencia local
+      </p>
+      <div class="cover__rule"></div>
+
+      <dl class="meta">
+        <div>
+          <dt>Autor</dt>
+          <dd>Carlos Villegas</dd>
+        </div>
+        <div>
+          <dt>Fecha</dt>
+          <dd>1 de noviembre de 2026</dd>
+        </div>
+        <div>
+          <dt>Técnica investigada</dt>
+          <dd>Opción A — Arquitectura Modular ES6</dd>
+        </div>
+        <div>
+          <dt>Repositorio</dt>
+          <dd><a href="https://github.com/carlosvillegas2733-rgb/taskmanager-vanilla">github.com/carlosvillegas2733-rgb/taskmanager-vanilla</a></dd>
+        </div>
+      </dl>
+    </div>
+
+    <section class="abstract">
+      <h2>Resumen</h2>
+      <p>
+        Este informe documenta el desarrollo de TaskManager, una aplicación de gestión de tareas
+        implementada con JavaScript Vanilla (ES6+) sin frameworks ni librerías. La aplicación permite
+        crear, editar, completar y eliminar tareas; filtrar por estado y buscar por título en tiempo
+        real; ordenar por fecha o prioridad; y visualizar métricas calculadas en vivo. Los datos se
+        importan desde la API pública JSONPlaceholder en la primera ejecución y se persisten en
+        <em>localStorage</em>, de modo que la aplicación sigue operando sin conexión. La técnica
+        investigada es la arquitectura modular nativa de ES6: seis módulos con responsabilidades
+        delimitadas y dependencias explícitas. El documento incluye la evidencia de ejecución y la
+        verificación de cada requisito.
+      </p>
+    </section>
+
+    <footer class="page__footer">
+      <span>Actividad Integradora 2 · TaskManager</span>
+      <span>Página 1 de 3</span>
+    </footer>
+  </article>
+
+  <article class="page">
+    <h2>1. Investigación técnica: Arquitectura Modular ES6</h2>
+
+    <p class="section-lead">
+      La arquitectura modular consiste en dividir la aplicación en archivos independientes que declaran
+      explícitamente qué ofrecen y qué necesitan. ES6 incorporó este mecanismo al lenguaje mediante
+      <code>export</code> e <code>import</code>, sin necesidad de bundlers ni librerías externas.
+    </p>
+
+    <h3>1.1 Cómo funciona</h3>
+    <p>
+      Cada archivo es un módulo con su propio ámbito: las variables y funciones no se filtran al objeto
+      global. Con <code>export</code> se expone una parte de ese ámbito y con <code>import</code> se
+      declara la dependencia desde otro módulo. El navegador construye un grafo de dependencias al cargar
+      la etiqueta <code>&lt;script type="module"&gt;</code>, evalúa cada módulo una sola vez y comparte la
+      misma instancia entre todos los importadores. Además, los módulos se ejecutan en modo estricto y
+      se cargan de forma diferida, lo que evita efectos colaterales en el orden de carga.
+    </p>
+
+    <h3>1.2 Aplicación en el proyecto</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Módulo</th>
+          <th>Responsabilidad</th>
+          <th>Depende de</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>api.js</code></td>
+          <td>Consulta JSONPlaceholder, valida la respuesta y mapea cada <em>todo</em> al modelo local.</td>
+          <td>validation.js</td>
+        </tr>
+        <tr>
+          <td><code>storage.js</code></td>
+          <td>Lee, valida y escribe la lista completa en <em>localStorage</em>. Único punto de acceso a Web Storage.</td>
+          <td>validation.js</td>
+        </tr>
+        <tr>
+          <td><code>validation.js</code></td>
+          <td>Reglas del formulario: título obligatorio (3–80 caracteres) y prioridad válida.</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><code>taskStore.js</code></td>
+          <td>Estado en memoria, CRUD, filtros, búsqueda, ordenamiento y métricas.</td>
+          <td>storage.js, validation.js</td>
+        </tr>
+        <tr>
+          <td><code>ui.js</code></td>
+          <td>Renderiza el estado, gestiona diálogos, notificaciones y eventos de la interfaz.</td>
+          <td>taskStore.js</td>
+        </tr>
+        <tr>
+          <td><code>app.js</code></td>
+          <td>Arranque, sincronización con la API y eventos <em>online</em>/<em>offline</em>.</td>
+          <td>api.js, storage.js, taskStore.js, ui.js</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>1.3 Implementación</h3>
+    <pre class="code"><span class="comment">// js/modules/storage.js — único punto de acceso a localStorage</span>
+<span class="keyword">export function</span> saveTasks(tasks) {
+  <span class="keyword">try</span> {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    <span class="keyword">return true</span>;
+  } <span class="keyword">catch</span> (error) {
+    <span class="keyword">return false</span>;
+  }
+}
+
+<span class="comment">// js/app.js — el resto de la app consume la interfaz pública</span>
+<span class="keyword">import</span> { loadTasks } <span class="keyword">from</span> <span class="string">'./modules/storage.js'</span>;</pre>
+
+    <h3>1.4 Ventajas observadas y límites</h3>
+    <ul class="bullets">
+      <li><strong>Responsabilidad única.</strong> Cambiar la API solo afecta a <code>api.js</code>; cambiar la persistencia, solo a <code>storage.js</code>.</li>
+      <li><strong>Dependencias explícitas.</strong> El grafo se lee en los <code>import</code>; no hay estado global compartido de forma oculta.</li>
+      <li><strong>Testabilidad.</strong> <code>taskStore.js</code> se prueba en Node con un <em>stub</em> de <code>localStorage</code>: 19 pruebas sin navegador.</li>
+      <li><strong>Límite.</strong> Los módulos requieren servirse por HTTP: abrir el archivo con <code>file://</code> bloquea los <code>import</code> por CORS.</li>
+    </ul>
+
+    <footer class="page__footer">
+      <span>1. Investigación técnica</span>
+      <span>Página 2 de 3</span>
+    </footer>
+  </article>
+
+  <article class="page">
+    <h2>2. Evidencia de ejecución</h2>
+    <p class="section-lead">
+      La aplicación se ejecutó en Chrome con el proyecto servido por HTTP. La Figura 1 muestra el estado
+      tras importar las tareas de la API y crear dos tareas locales; la Figura 2 evidencia la
+      serialización en <em>localStorage</em>.
+    </p>
+
+    <figure class="shot shot--app">
+      <div class="shot__frame">
+        <img src="docs/captures/01-app.png" alt="Interfaz de TaskManager con 14 tareas, métricas y dashboard" />
+      </div>
+      <figcaption>Figura 1. Panel principal: dashboard, filtros, ordenamiento y tareas persistidas.</figcaption>
+    </figure>
+
+    <figure class="shot shot--devtools">
+      <div class="shot__frame">
+        <img
+          src="docs/captures/02-localstorage.png"
+          alt="Panel Application de DevTools con la clave taskmanager.tasks.v1"
+          onerror="this.style.display='none'; this.parentElement.classList.add('is-pending');"
+        />
+        <p class="shot__pending">
+          Captura pendiente: DevTools → Application → Local Storage → clave <strong>taskmanager.tasks.v1</strong>
+        </p>
+      </div>
+      <figcaption>Figura 2. Panel <em>Application → Local Storage</em> con las tareas serializadas.</figcaption>
+    </figure>
+
+    <h2 class="section-title">3. Verificación de requisitos</h2>
+    <ul class="checklist">
+      <li><span class="check">✔</span><strong>CRUD completo.</strong> Crear, editar, completar y eliminar persisten tras recargar.</li>
+      <li><span class="check">✔</span><strong>Validación estricta.</strong> Título vacío o prioridad sin elegir bloquean el envío con mensaje.</li>
+      <li><span class="check">✔</span><strong>Filtros y búsqueda.</strong> Por estado y en tiempo real con <code>includes</code> y <code>toLowerCase</code>.</li>
+      <li><span class="check">✔</span><strong>Ordenamiento.</strong> <code>sort()</code> por fecha (asc/desc) y prioridad alta → baja.</li>
+      <li><span class="check">✔</span><strong>Métricas.</strong> Total, pendientes, completadas y progreso recalculados en cada cambio.</li>
+      <li><span class="check">✔</span><strong>Carga inicial.</strong> <code>fetch</code> + <code>async/await</code>; 12 tareas importadas sin duplicados.</li>
+      <li><span class="check">✔</span><strong>Errores y offline.</strong> <code>try/catch</code>, timeout de 8 s y aviso visual; la app sigue operando sin red.</li>
+      <li><span class="check">✔</span><strong>Persistencia.</strong> Clave <code>taskmanager.tasks.v1</code> con <code>JSON.stringify</code> / <code>JSON.parse</code>.</li>
+      <li><span class="check">✔</span><strong>Arquitectura modular.</strong> Seis módulos con <code>import</code>/<code>export</code> y sin dependencias externas.</li>
+    </ul>
+
+    <h2 class="section-title">4. Conclusión</h2>
+    <p class="conclusion">
+      La aplicación cumple los cuatro bloques funcionales y los cuatro puntos de API y persistencia. La
+      arquitectura modular permitió aislar el almacenamiento y la red detrás de interfaces pequeñas, lo
+      que hizo posible probar la lógica sin navegador y detectar dos errores de interfaz que solo
+      aparecían en ejecución. El resultado es una aplicación sin dependencias externas, verificable y
+      mantenible, con un historial de cambios organizado por etapas.
+    </p>
+
+    <footer class="page__footer">
+      <span>2. Evidencia y verificación</span>
+      <span>Página 3 de 3</span>
+    </footer>
+  </article>
+</body>
+</html>
