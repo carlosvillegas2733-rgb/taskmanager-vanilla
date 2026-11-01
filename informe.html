@@ -301,18 +301,15 @@
       width: 100%;
     }
 
-    .shot--app img {
-      height: 42mm;
-      object-fit: cover;
-      object-position: top;
+    .shot--devtools img {
+      display: block;
+      width: 100%;
+      height: 102mm;
+      object-fit: contain;
     }
 
-    .shot--devtools img {
-      width: 100%;
-      height: 68mm;
-      object-fit: contain;
-      background: var(--surface);
-      margin: 0 auto;
+    .shot--devtools .shot__frame {
+      background: #1f2225;
     }
 
     .shot__pending {
@@ -337,7 +334,7 @@
     }
 
     .section-title {
-      margin-top: 5mm;
+      margin-top: 4mm;
     }
 
     .checklist {
@@ -557,31 +554,28 @@
   <article class="page">
     <h2>2. Evidencia de ejecución</h2>
     <p class="section-lead">
-      La aplicación se ejecutó en Chrome con el proyecto servido por HTTP. La Figura 1 muestra el estado
-      tras importar las tareas de la API y crear dos tareas locales; la Figura 2 evidencia la
-      serialización en <em>localStorage</em>.
+      La aplicación se ejecutó en Chrome sobre GitHub Pages. La Figura 1 muestra el panel
+      <em>Application → Local Storage</em> de DevTools con la clave <code>taskmanager.tasks.v1</code>
+      y el arreglo JSON completo de tareas.
     </p>
-
-    <figure class="shot shot--app">
-      <div class="shot__frame">
-        <img src="docs/captures/01-app.png" alt="Interfaz de TaskManager con 14 tareas, métricas y dashboard" />
-      </div>
-      <figcaption>Figura 1. Panel principal: dashboard, filtros, ordenamiento y tareas persistidas.</figcaption>
-    </figure>
 
     <figure class="shot shot--devtools">
       <div class="shot__frame">
         <img
           src="docs/captures/02-localstorage.png"
-          alt="Panel Application de DevTools con la clave taskmanager.tasks.v1"
-          onerror="this.style.display='none'; this.parentElement.classList.add('is-pending');"
+          alt="Panel Application de DevTools con la clave taskmanager.tasks.v1 y las tareas serializadas"
         />
-        <p class="shot__pending">
-          Captura pendiente: DevTools → Application → Local Storage → clave <strong>taskmanager.tasks.v1</strong>
-        </p>
       </div>
-      <figcaption>Figura 2. Panel <em>Application → Local Storage</em> con las tareas serializadas.</figcaption>
+      <figcaption>Figura 1. Panel <em>Application → Local Storage</em> con las 13 tareas serializadas.</figcaption>
     </figure>
+
+    <p class="section-lead" style="margin-top: 3.5mm;">
+      El panel confirma que cada operación escribe el arreglo completo bajo la clave
+      <code>taskmanager.tasks.v1</code>: aparecen las 12 tareas importadas de la API (con
+      <code>apiId</code> 1–12) y la tarea creada localmente, identificada con un UUID. Al recargar,
+      <code>loadTasks()</code> aplica <code>JSON.parse()</code>, valida la estructura de cada elemento y
+      reconstruye el estado sin volver a consultar la API; por eso la aplicación funciona sin conexión.
+    </p>
 
     <h2 class="section-title">3. Verificación de requisitos</h2>
     <ul class="checklist">

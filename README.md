@@ -4,6 +4,8 @@ Aplicación de gestión de tareas construida con **JavaScript Vanilla (ES6+)**, 
 
 El eje de investigación técnica es la **Opción A: Arquitectura Modular ES6** (`import` / `export`), con una separación estricta entre interfaz, estado, servicio API y almacenamiento.
 
+![Vista principal de TaskManager](docs/captures/01-app.png)
+
 ## Demo
 
 - **Repositorio:** https://github.com/carlosvillegas2733-rgb/taskmanager-vanilla
