@@ -10,7 +10,6 @@
 | Herramienta | Modelo | Momento de uso |
 | --- | --- | --- |
 | OpenCode (agente de código en terminal) | DeepSeek V4.1 Flash | Estructura del proyecto, implementación de los módulos ES6, revisión de errores de integración y redacción de la documentación |
-| Documentación oficial de MDN Web Docs | — | Consulta de `import`/`export`, `localStorage`, `fetch`, `<dialog>` y `AbortController` |
 
 La IA se usó como apoyo de implementación y revisión, no como sustituto de las decisiones del proyecto. Las decisiones de alcance, la arquitectura modular, la verificación en el navegador y la elaboración de las evidencias se hicieron sobre el código ejecutado, no sobre una propuesta teórica.
 
@@ -22,7 +21,7 @@ La IA se usó como apoyo de implementación y revisión, no como sustituto de la
 
 **Resultado:** una primera estructura de archivos y el esqueleto de los módulos.
 
-**Uso que se dio:** se descartó la idea de concentrar todo en un solo archivo y se mantuvo la separación por responsabilidades que exige la Opción A.
+**Uso que se dio:** se mantuvo la separación por responsabilidades que exige la Opción A, con seis módulos y una única dirección de dependencias.
 
 ### Prompt 2 — Decisión de arquitectura
 
