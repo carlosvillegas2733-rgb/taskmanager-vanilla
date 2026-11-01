@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TaskManager en JavaScript vanilla: módulos ES6, consumo de API REST y persistencia en localStorage." />
+  <title>TaskManager · Gestión de tareas</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%236366f1'/%3E%3Cpath d='M20 6 9 17l-5-5' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#task-list">Ir a la lista de tareas</a>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        </span>
+        <div class="brand__text">
+          <h1 class="brand__name">TaskManager</h1>
+          <p class="brand__tag">Organiza tu día, incluso sin conexión</p>
+        </div>
+      </div>
+
+      <div class="topbar__actions">
+        <span class="status" id="network-status" data-state="online">
+          <span class="status__dot" aria-hidden="true"></span>
+          <span class="status__label">En línea</span>
+        </span>
+        <button class="btn btn--ghost" id="sync-button" type="button">
+          <span class="btn__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+              <path d="M21 3v6h-6" />
+            </svg>
+          </span>
+          <span class="btn__label">Sincronizar API</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="dashboard" aria-label="Métricas de tareas">
+        <article class="metric metric--total">
+          <p class="metric__label">Total de tareas</p>
+          <p class="metric__value" id="metric-total">0</p>
+          <p class="metric__hint">registradas en este dispositivo</p>
+        </article>
+        <article class="metric metric--pending">
+          <p class="metric__label">Pendientes</p>
+          <p class="metric__value" id="metric-pending">0</p>
+          <p class="metric__hint">por completar</p>
+        </article>
+        <article class="metric metric--completed">
+          <p class="metric__label">Completadas</p>
+          <p class="metric__value" id="metric-completed">0</p>
+          <p class="metric__hint">listas para archivar</p>
+        </article>
+        <article class="metric metric--progress">
+          <p class="metric__label">Progreso</p>
+          <p class="metric__value" id="metric-progress">0%</p>
+          <div class="progress" id="progress-bar" role="progressbar" aria-label="Progreso de tareas completadas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <span class="progress__fill" id="progress-fill"></span>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel" aria-label="Listado de tareas">
+        <div class="toolbar">
+          <div class="field field--search">
+            <label class="sr-only" for="search-input">Buscar tareas por título</label>
+            <span class="field__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" />
+              </svg>
+            </span>
+            <input id="search-input" type="search" placeholder="Buscar por título..." autocomplete="off" />
+          </div>
+
+          <div class="segmented" role="group" aria-label="Filtrar tareas por estado">
+            <button class="segmented__btn is-active" type="button" data-filter="all" aria-pressed="true">Todas</button>
+            <button class="segmented__btn" type="button" data-filter="pending" aria-pressed="false">Pendientes</button>
+            <button class="segmented__btn" type="button" data-filter="completed" aria-pressed="false">Completadas</button>
+          </div>
+
+          <div class="field field--select">
+            <label for="sort-select">Ordenar por</label>
+            <select id="sort-select">
+              <option value="date-desc">Más recientes</option>
+              <option value="date-asc">Más antiguas</option>
+              <option value="priority">Prioridad (alta → baja)</option>
+            </select>
+          </div>
+
+          <button class="btn btn--primary" id="new-task-button" type="button">
+            <span class="btn__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </span>
+            <span>Nueva tarea</span>
+          </button>
+        </div>
+
+        <div class="list-header">
+          <p class="list-header__count" id="result-count">0 tareas</p>
+          <p class="list-header__hint">Los cambios se guardan automáticamente</p>
+        </div>
+
+        <ul class="task-list" id="task-list"></ul>
+
+        <div class="empty" id="empty-state" hidden>
+          <span class="empty__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3 8-8" />
+              <path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" />
+            </svg>
+          </span>
+          <h2 class="empty__title" id="empty-title">Sin tareas por aquí</h2>
+          <p class="empty__description" id="empty-description">Crea tu primera tarea o sincroniza con la API para empezar.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>JavaScript vanilla · Módulos ES6 · <span id="storage-badge">localStorage activo</span></p>
+      <p class="footer__hint">Los datos viven en tu navegador. Nada se envía a un servidor propio.</p>
+    </footer>
+  </div>
+
+  <dialog class="dialog" id="task-dialog" aria-labelledby="dialog-title">
+    <form class="dialog__form" id="task-form" novalidate>
+      <header class="dialog__header">
+        <h2 class="dialog__title" id="dialog-title">Nueva tarea</h2>
+        <button class="icon-btn" type="button" id="dialog-close" aria-label="Cerrar formulario">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </header>
+
+      <div class="dialog__body">
+        <label class="form-field" for="task-title">
+          <span class="form-field__label">Título de la tarea <em aria-hidden="true">*</em></span>
+          <input id="task-title" name="title" type="text" maxlength="80" placeholder="Ej. Estudiar módulos ES6" autocomplete="off" />
+          <small class="form-field__error" id="title-error" role="alert"></small>
+        </label>
+
+        <label class="form-field" for="task-priority">
+          <span class="form-field__label">Prioridad <em aria-hidden="true">*</em></span>
+          <select id="task-priority" name="priority">
+            <option value="">Selecciona una prioridad</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+          </select>
+          <small class="form-field__error" id="priority-error" role="alert"></small>
+        </label>
+      </div>
+
+      <footer class="dialog__footer">
+        <button class="btn btn--ghost" type="button" id="dialog-cancel">Cancelar</button>
+        <button class="btn btn--primary" type="submit" id="dialog-submit">Crear tarea</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="dialog dialog--sm" id="confirm-dialog" aria-labelledby="confirm-title">
+    <div class="dialog__body">
+      <h2 class="dialog__title" id="confirm-title">Eliminar tarea</h2>
+      <p class="dialog__message" id="confirm-message">¿Seguro que quieres eliminar esta tarea?</p>
+    </div>
+    <footer class="dialog__footer">
+      <button class="btn btn--ghost" type="button" id="confirm-cancel">Cancelar</button>
+      <button class="btn btn--danger" type="button" id="confirm-accept">Eliminar</button>
+    </footer>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+  <noscript>
+    <p class="noscript">TaskManager necesita JavaScript activado para funcionar.</p>
+  </noscript>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

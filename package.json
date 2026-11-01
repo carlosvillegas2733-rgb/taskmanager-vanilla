@@ -1,0 +1,10 @@
+{
+  "name": "taskmanager-vanilla",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TaskManager en JavaScript vanilla con módulos ES6, consumo de API REST y persistencia en localStorage.",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/taskStore.test.mjs"
+  }
+}
