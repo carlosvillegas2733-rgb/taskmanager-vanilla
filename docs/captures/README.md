@@ -2,8 +2,8 @@
 
 ## `01-app.png`
 
-Vista principal de la aplicación: dashboard, filtros, ordenamiento y tareas importadas y locales.
-Se usa como vista previa en el `README.md`.
+Vista principal de la aplicación con 13 tareas (12 de JSONPlaceholder y la creada localmente).
+Se usa como vista previa en el `README.md` y en la portada del informe.
 
 ## `02-localstorage.png`
 

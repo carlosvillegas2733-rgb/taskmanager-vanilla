@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Carlos Villegas" />
+  <meta name="description" content="Actividad Integradora 2: TaskManager con módulos ES6, API REST y persistencia en localStorage." />
   <title>Informe — Actividad Integradora 2 · TaskManager</title>
   <style>
     :root {
@@ -121,7 +123,7 @@
     }
 
     .cover__main {
-      margin-top: 34mm;
+      margin-top: 30mm;
     }
 
     .eyebrow {
@@ -151,7 +153,7 @@
     .cover__rule {
       width: 34mm;
       height: 3px;
-      margin: 9mm 0;
+      margin: 8mm 0;
       background: var(--accent);
       border-radius: 999px;
     }
@@ -179,8 +181,8 @@
     }
 
     .abstract {
-      margin-top: 18mm;
-      padding: 5mm 6mm;
+      margin-top: 14mm;
+      padding: 4mm 6mm;
       border-left: 3px solid var(--accent);
       background: var(--surface);
     }
@@ -197,6 +199,26 @@
       font-size: 9.5pt;
       color: var(--muted);
       text-align: justify;
+    }
+
+    .cover__shot {
+      margin-top: 5mm;
+    }
+
+    .cover__shot img {
+      display: block;
+      width: 100%;
+      height: 35mm;
+      object-fit: cover;
+      object-position: top;
+      border: 1px solid var(--line);
+      border-radius: 2.5mm;
+    }
+
+    .cover__shot figcaption {
+      margin-top: 1mm;
+      font-size: 8pt;
+      color: var(--soft);
     }
 
     /* Content */
@@ -354,9 +376,7 @@
       color: #1e293b;
     }
 
-    .checklist li:last-child {
-      grid-column: 1 / -1;
-    }
+
 
     .checklist code {
       font-size: 8pt;
@@ -437,6 +457,10 @@
           <dt>Repositorio</dt>
           <dd><a href="https://github.com/carlosvillegas2733-rgb/taskmanager-vanilla">github.com/carlosvillegas2733-rgb/taskmanager-vanilla</a></dd>
         </div>
+        <div>
+          <dt>Demo publicada</dt>
+          <dd><a href="https://carlosvillegas2733-rgb.github.io/taskmanager-vanilla/">carlosvillegas2733-rgb.github.io/taskmanager-vanilla</a></dd>
+        </div>
       </dl>
     </div>
 
@@ -454,6 +478,11 @@
         verificación de cada requisito.
       </p>
     </section>
+
+    <figure class="cover__shot">
+      <img src="docs/captures/01-app.png" alt="Vista del panel principal de TaskManager" />
+      <figcaption>TaskManager en ejecución: dashboard, filtros y tareas persistidas.</figcaption>
+    </figure>
 
     <footer class="page__footer">
       <span>Actividad Integradora 2 · TaskManager</span>
@@ -481,6 +510,11 @@
     </p>
 
     <h3>1.2 Aplicación en el proyecto</h3>
+    <p>
+      El flujo es unidireccional: <code>app.js</code> compone la interfaz (<code>ui.js</code>), la
+      interfaz opera sobre el estado (<code>taskStore.js</code>) y el estado persiste mediante
+      <code>storage.js</code>; <code>api.js</code> solo se consume desde <code>app.js</code>.
+    </p>
     <table class="table">
       <thead>
         <tr>
@@ -588,15 +622,16 @@
       <li><span class="check">✔</span><strong>Errores y offline.</strong> <code>try/catch</code>, timeout de 8 s y aviso visual; la app sigue operando sin red.</li>
       <li><span class="check">✔</span><strong>Persistencia.</strong> Clave <code>taskmanager.tasks.v1</code> con <code>JSON.stringify</code> / <code>JSON.parse</code>.</li>
       <li><span class="check">✔</span><strong>Arquitectura modular.</strong> Seis módulos con <code>import</code>/<code>export</code> y sin dependencias externas.</li>
+      <li><span class="check">✔</span><strong>Consola limpia.</strong> Cero errores, excepciones o peticiones fallidas en la verificación automatizada.</li>
     </ul>
 
     <h2 class="section-title">4. Conclusión</h2>
     <p class="conclusion">
       La aplicación cumple los cuatro bloques funcionales y los cuatro puntos de API y persistencia. La
-      arquitectura modular permitió aislar el almacenamiento y la red detrás de interfaces pequeñas, lo
-      que hizo posible probar la lógica sin navegador y detectar dos errores de interfaz que solo
-      aparecían en ejecución. El resultado es una aplicación sin dependencias externas, verificable y
-      mantenible, con un historial de cambios organizado por etapas.
+      arquitectura modular aisló el almacenamiento y la red detrás de interfaces pequeñas, permitió
+      probar la lógica sin navegador y detectó dos errores de interfaz que solo aparecían en ejecución.
+      El resultado no tiene dependencias externas: recargar no duplica registros, las mutaciones
+      persisten y la consola no muestra errores.
     </p>
 
     <footer class="page__footer">
